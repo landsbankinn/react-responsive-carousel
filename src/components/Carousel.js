@@ -41,7 +41,8 @@ class Carousel extends Component {
         emulateTouch: PropTypes.bool,
         statusFormatter: PropTypes.func.isRequired,
         centerMode: PropTypes.bool,
-        centerSlidePercentage: PropTypes.number
+        centerSlidePercentage: PropTypes.number,
+        sliderOffset: PropTypes.number
     };
 
     static defaultProps = {
@@ -68,7 +69,8 @@ class Carousel extends Component {
         onChange: noop,
         statusFormatter: defaultStatusFormatter,
         centerMode: false,
-        centerSlidePercentage: 80
+        centerSlidePercentage: 80,
+        sliderOffset: 0
     };
 
     constructor(props) {
@@ -407,11 +409,16 @@ class Carousel extends Component {
         if (this.props.centerMode && this.props.axis === 'horizontal') {
             let currentPosition = - index * this.props.centerSlidePercentage;
             const lastPosition = childrenLength - 1;
+            
+            if (index === 0) {
+                currentPosition += this.props.sliderOffset;
+            }
+
 
             if (index && (index !== lastPosition || this.props.infiniteLoop)) {
                 currentPosition += (100 - this.props.centerSlidePercentage) / 2;
             } else if (index === lastPosition) {
-                currentPosition += (100 - this.props.centerSlidePercentage);
+                currentPosition += (100 - this.props.centerSlidePercentage - this.props.sliderOffset);
             }
 
             return currentPosition;
